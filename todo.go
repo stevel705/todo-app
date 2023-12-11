@@ -4,10 +4,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/alexeyco/simpletable"
 )
 
 type item struct {
@@ -78,16 +81,48 @@ func (t *Todos) Store(filename string) error {
 
 func (t *Todos) Print() {
 
-	for i, item := range *t {
-		prefix := " "
-		if item.Done {
-			prefix = "X"
-		}
-		println(i+1, prefix, item.Task)
-	}
-}
+	table := simpletable.New()
 
-func getInput(r io.Reader, args ...string) (string, error) {
+	table.Header = &simpletable.Header{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Text: "#"},
+			{Align: simpletable.AlignCenter, Text: "Task"},
+			{Align: simpletable.AlignCenter, Text: "Done?"},
+			{Align: simpletable.AlignRight, Text: "CreatedAt"},
+			{Align: simpletable.AlignRight, Text: "CompletedAt"},
+		},
+	}
+
+	var cells [][]*simpletable.Cell
+
+	for idx, item := range *t {
+		idx++
+		task := blue(item.Task)
+		done := blue("no")
+		if item.Done {
+			task = green(fmt.Sprintf("\u2705 %s", item.Task))
+			done = green("yes")
+		}
+		cells = append(cells, *&[]*simpletable.Cell{
+			{Text: fmt.Sprintf("%d", idx)},
+			{Text: task},
+			{Text: done},
+			{Text: item.CreatedAt.Format(time.RFC822)},
+			{Text: item.CompletedAt.Format(time.RFC822)},
+		})
+	}
+
+	table.Body = &simpletable.Body{Cells: cells}
+
+	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
+		{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("You have %d pending todos", t.CountPending()))},
+	}}
+
+	table.SetStyle(simpletable.StyleUnicode)
+
+	table.Println()
+}
+func GetInput(r io.Reader, args ...string) (string, error) {
 
 	if len(args) > 0 {
 		return strings.Join(args, " "), nil
@@ -107,4 +142,15 @@ func getInput(r io.Reader, args ...string) (string, error) {
 	}
 
 	return text, nil
+}
+
+func (t *Todos) CountPending() int {
+	total := 0
+	for _, item := range *t {
+		if !item.Done {
+			total++
+		}
+	}
+
+	return total
 }
