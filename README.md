@@ -71,6 +71,22 @@ The application's structure is as follows:
 - `todos.json`: Stores the todo items in a JSON format.
 - `Makefile`: Contains commands for building and running the application.
 
+## Example 
+
+```diff
+╔═══╤═══════════════════════════════╤═══════╤═════════════════════╤═════════════════════╗
+║ # │             Task              │ Done? │           CreatedAt │         CompletedAt ║
+╟━━━┼━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┼━━━━━━━┼━━━━━━━━━━━━━━━━━━━━━┼━━━━━━━━━━━━━━━━━━━━━╢
+║ 1 │ ✅ Create todo app on golang  │ yes   │ 09 Dec 23 21:21 +04 │ 11 Dec 23 22:38 +04 ║
+║ 2 │ ✅ write readme               │ yes   │ 09 Dec 23 21:24 +04 │ 11 Dec 23 22:38 +04 ║
+║ 3 │ another task                  │ no    │ 11 Dec 23 22:29 +04 │ 01 Jan 01 00:00 UTC ║
+║ 4 │ another task from pipe        │ no    │ 11 Dec 23 22:30 +04 │ 01 Jan 01 00:00 UTC ║
+╟━━━┼━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┼━━━━━━━┼━━━━━━━━━━━━━━━━━━━━━┼━━━━━━━━━━━━━━━━━━━━━╢
+║                               You have 2 pending todos                                ║
+╚═══╧═══════════════════════════════╧═══════╧═════════════════════╧═════════════════════╝
+```
+
+
 ## Contributing
 
 Contributions to improve the application are welcome. Feel free to fork the repository and submit pull requests.
