@@ -1,13 +1,10 @@
 package todo
 
 import (
-	"bufio"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/alexeyco/simpletable"
@@ -122,27 +119,7 @@ func (t *Todos) Print() {
 
 	table.Println()
 }
-func GetInput(r io.Reader, args ...string) (string, error) {
 
-	if len(args) > 0 {
-		return strings.Join(args, " "), nil
-	}
-
-	scanner := bufio.NewScanner(r)
-	scanner.Scan()
-
-	if err := scanner.Err(); err != nil {
-		return "", err
-	}
-
-	text := scanner.Text()
-
-	if len(text) == 0 {
-		return "", errors.New("task cannot be blank")
-	}
-
-	return text, nil
-}
 
 func (t *Todos) CountPending() int {
 	total := 0
